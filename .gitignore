@@ -19,3 +19,6 @@
 .buildpath
 .settings
 .project
+/log
+/tmp
+composer.phar

@@ -50,7 +50,7 @@ class CookieBuilder
         $expires         = time() + $this->config['lifetime'];
         $data['expires'] = ($this->config['lifetime'] > 0) ? $expires : null;
         $value           = $this->encryption->encryptData(json_encode($data));
-        //$domain          = $this->extractMainDomain($domain); // @NOTE: So it works on server:run, we're not doing this
+        $domain          = $this->extractMainDomain($domain);
 
         $cookie = new Cookie(
             $this->config['name'],

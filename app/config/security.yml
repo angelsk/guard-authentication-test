@@ -44,5 +44,5 @@ security:
                 authenticator: authenticator_cookie_simple
 
     access_control:
-        - { path: ^/login$,     role: IS_AUTHENTICATED_ANONYMOUSLY } #, requires_channel: https } ## HTTPS doesn't work nicely with server:run
-        - { path: ^/,           role: ROLE_USER } #, requires_channel: https }
+        - { path: ^/login$,     role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/,           role: ROLE_USER, requires_channel: https }

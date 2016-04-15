@@ -1,0 +1,73 @@
+parameters:
+    authenticator_cookie_simple.class: AuthenticationBundle\Security\Authentication\SimpleCookieAuthenticator
+    cookie_validator.class: AuthenticationBundle\Security\CookieValidator
+    cookie_builder.class: AuthenticationBundle\Security\CookieBuilder
+    encryption.class: AuthenticationBundle\Security\Encryption\Encryption
+    activedirectory_userprovider.class: AuthenticationBundle\Security\Provider\ActiveDirectoryUserProvider
+    activedirectory_repository.class: AuthenticationBundle\Entity\Repository\ActiveDirectoryRepository
+    activedirectory_roleprovider.class: AuthenticationBundle\Security\Provider\ActiveDirectoryRoleProvider
+    ldap_client_factory.class: AuthenticationBundle\Services\Utilities\LdapClientFactory
+    activedirectory_factory.class: AuthenticationBundle\Entity\ActiveDirectoryFactory
+    activedirectory_helper.class: AuthenticationBundle\Services\Utilities\ActiveDirectoryHelper
+    authenticator_activedirectory.class: AuthenticationBundle\Security\Authentication\ActiveDirectoryAuthenticator
+    cookie.config:
+        name:     auth-cookie
+        lifetime: 28800       # 8 hours
+    ldap.config.search: []
+    ldap.config.client: []
+
+services:
+    authenticator_cookie_simple:
+        class: %authenticator_cookie_simple.class%
+        arguments:
+           - %cookie.config%
+           - "@cookie_validator"
+
+    cookie_validator:
+        class: %cookie_validator.class%
+        arguments:
+            - "@encryption"
+
+    cookie_builder:
+        class: %cookie_builder.class%
+        arguments:
+            - "@encryption"
+            - %cookie.config%
+
+    encryption:
+        class: %encryption.class%
+
+    activedirectory_userprovider:
+        class: %activedirectory_userprovider.class%
+        arguments:
+            - "@activedirectory_repository"
+            - "@activedirectory_roleprovider"
+            
+    activedirectory_repository:
+        class: %activedirectory_repository.class%
+        arguments:  
+            - %ldap.config.search%
+            - "@ldap_client_factory"
+            - "@activedirectory_factory"
+
+    activedirectory_roleprovider:
+        class: %activedirectory_roleprovider.class%
+
+    ldap_client_factory:
+        class: %ldap_client_factory.class%
+        arguments:
+            - %ldap.config.client%
+            
+    activedirectory_factory:
+        class: %activedirectory_factory.class%
+        arguments:  
+            - "@activedirectory_helper"
+
+    activedirectory_helper:
+        class: %activedirectory_helper.class% 
+        
+    authenticator_activedirectory:
+        class: %authenticator_activedirectory.class%
+        arguments:
+            - "@ldap_client_factory"
+            - "@cookie_builder"

@@ -1,0 +1,7 @@
+authentication_homepage:
+    path:     /login
+    defaults: { _controller: AuthenticationBundle:Default:index }
+
+authentication_logout:
+    path:     /logout
+    defaults: { _controller: AuthenticationBundle:Default:logout }
